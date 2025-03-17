@@ -21,7 +21,8 @@ void gerar_arquivo() {
     
     // Gera 409600 itens
     srand(time(NULL)); // Inicializa a semente para números aleatórios
-    for (int i = 0; i < 409600; i++) {
+    //for (int i = 0; i < 52428800; i++) {
+    for (int i = 0; i < 1073741824; i++) {
         int peso = rand() % 30 + 1; // Gera um peso entre 1 e 30
         int valor = rand() % 100 + 1; // Gera um valor entre 1 e 100
         fprintf(arquivo, "%d\t%d\n", peso, valor);
