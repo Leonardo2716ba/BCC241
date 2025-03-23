@@ -18,3 +18,4 @@ for num_itens in "$@"; do
         swapoff -av ; swapon -av  # Reinicia a swap
     done
 done
+

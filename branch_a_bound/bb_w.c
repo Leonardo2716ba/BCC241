@@ -34,17 +34,22 @@ struct Solucao {
 Problema LeProblema(const string& nome_arquivo, int capacidade) {
     ifstream file(nome_arquivo);
     Problema p;
+    p.capacidade = capacidade;
     srand(time(nullptr)); // Inicializa o gerador de números aleatórios
 
-    // Define a capacidade da mochila passada como argumento
-    p.capacidade = capacidade;
+    // Ignora a primeira linha
+    string primeira_linha;
+    getline(file, primeira_linha);
 
     // Lê os itens
     int peso, valor;
-    while (file >> peso >> valor) {
-        // Gera um número aleatório entre 0 e 99, ignorando o item se for menor que 80
-        if (rand() % 100 >= 95) {
+    for (int i = 0; i < 400;) {
+        file >> peso >> valor;
+        
+        // Gera um número aleatório entre 0 e 99, ignorando o item se for menor que 70
+        if (rand() % 100 >= 70) {
             p.itens.push_back({peso, valor});
+            i++;
         }
     }
 
@@ -138,19 +143,15 @@ void criarDiretorioResultados() {
 
 int main(int argc, char* argv[]) {
     if (argc < 2) {
-        cerr << "Uso: " << argv[0] << " <peso_mochila>" << endl;
+        cerr << "Uso: " << argv[0] << " <capacidade_mochila>" << endl;
         return 1;
     }
 
-    // Define o número de itens fixo
-    const int num_itens = 400; // Você pode alterar esse valor conforme necessário
-
-    // Lê o peso da mochila passado como argumento
-    int peso_mochila = stoi(argv[1]);
+    int capacidade_mochila = stoi(argv[1]);
     string nome_arquivo = "../arquivos_texto/mochila.txt";
 
     // Ler o problema
-    Problema p = LeProblema(nome_arquivo, peso_mochila);
+    Problema p = LeProblema(nome_arquivo, capacidade_mochila);
 
     // Gerar solução inicial gulosa
     Solucao melhor = Gulosa(p);
@@ -178,7 +179,7 @@ int main(int argc, char* argv[]) {
     criarDiretorioResultados();
 
     // Salvar os resultados em um arquivo CSV
-    string nome_csv = "./resultados/" + to_string(peso_mochila) + ".csv";
+    string nome_csv = "./resultados/400.csv";
     ofstream csv_file(nome_csv, ios::app);
     if (!csv_file) {
         cerr << "Erro ao abrir o arquivo CSV!" << endl;
@@ -186,7 +187,7 @@ int main(int argc, char* argv[]) {
     }
 
     // Escreve os dados no arquivo CSV
-    csv_file << num_itens << ","
+    csv_file << 400 << ","
              << p.capacidade << ","
              << melhor.valor << ","
              << duration.count() << endl;
